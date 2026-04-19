@@ -27,19 +27,20 @@ export default function Page() {
 
   return (
     <>
-      {!installed && (
+      {!installed ? (
         <PWAInstallModal onInstalled={() => setInstalled(true)} />
-      )}
+      ) : (
 
-      <Suspense
-        fallback={
-          <div className="flex min-h-screen items-center justify-center bg-gray-100">
-            <LottieWelcomeAnimation />
-          </div>
-        }
-      >
-        <AdminPage />
-      </Suspense>
+        <Suspense
+          fallback={
+            <div className="flex min-h-screen items-center justify-center bg-gray-100">
+              <LottieWelcomeAnimation />
+            </div>
+          }
+        >
+          <AdminPage />
+        </Suspense>
+      )}
     </>
   );
 }
