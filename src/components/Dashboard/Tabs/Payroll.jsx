@@ -43,11 +43,24 @@ export default function PayrollDashboard() {
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [deleteId, setDeleteId] = useState(null);
+
+    // const [form, setForm] = useState({
+    //     user: "", month: "", year: "",
+    //     basicSalary: "", allowances: "", deductions: "",
+    //     netSalary: "", notes: "",
+    // });
 
     const [form, setForm] = useState({
-        user: "", month: "", year: "",
-        basicSalary: "", allowances: "", deductions: "",
-        netSalary: "", notes: "",
+        user: "",
+        month: "",
+        year: "",
+        basicSalary: "",
+        allowances: "",
+        deductions: "",
+        netSalary: "",
+        notes: "",
+        isPaid: false,
     });
 
     const fetchPayroll = async () => {
@@ -96,12 +109,27 @@ export default function PayrollDashboard() {
                 allowances: Number(form.allowances),
                 deductions: Number(form.deductions),
                 netSalary: Number(form.netSalary),
+                isPaid: form.isPaid,
             }),
         });
         resetForm();
         fetchPayroll();
     };
 
+    // const handleEdit = (item) => {
+    //     setForm({
+    //         user: item.user?._id || "",
+    //         month: item.month,
+    //         year: item.year,
+    //         basicSalary: item.basicSalary,
+    //         allowances: item.allowances,
+    //         deductions: item.deductions,
+    //         netSalary: item.netSalary,
+    //         notes: item.notes || "",
+    //     });
+    //     setEditingId(item._id);
+    //     setShowForm(true);
+    // };
     const handleEdit = (item) => {
         setForm({
             user: item.user?._id || "",
@@ -112,11 +140,12 @@ export default function PayrollDashboard() {
             deductions: item.deductions,
             netSalary: item.netSalary,
             notes: item.notes || "",
+            isPaid: item.isPaid || false, // ✅ ADD THIS
         });
+
         setEditingId(item._id);
         setShowForm(true);
     };
-
     const handleDelete = async (id) => {
         await fetch(`/api/payroll/${id}`, {
             method: "DELETE",
@@ -205,13 +234,13 @@ export default function PayrollDashboard() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="bg-slate-50">
-                                <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Employee</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Period</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Basic</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Net Salary</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Status</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wide">Actions</th>
+                            <tr className="bg-blue-950">
+                                <th className="px-6 py-3 text-xs font-semibold text-white uppercase tracking-wide">Employee</th>
+                                <th className="px-6 py-3 text-xs font-semibold text-white uppercase tracking-wide">Period</th>
+                                <th className="px-6 py-3 text-xs font-semibold text-white uppercase tracking-wide">Basic</th>
+                                <th className="px-6 py-3 text-xs font-semibold text-white uppercase tracking-wide">Net Salary</th>
+                                <th className="px-6 py-3 text-xs font-semibold text-white uppercase tracking-wide">Status</th>
+                                <th className="px-6 py-3 text-xs font-semibold text-white uppercase tracking-wide">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
@@ -291,8 +320,15 @@ export default function PayrollDashboard() {
                                                 >
                                                     <Pencil size={12} /> Edit
                                                 </button>
-                                                <button
+                                                {/* <button
                                                     onClick={() => handleDelete(item._id)}
+                                                    className="inline-flex items-center gap-1.5 text-xs font-medium bg-rose-50 text-rose-500 hover:bg-rose-100 rounded-lg px-3 py-1.5 transition-colors"
+                                                >
+                                                    <Trash2 size={12} /> Delete
+                                                </button> */}
+
+                                                <button
+                                                    onClick={() => setDeleteId(item._id)}
                                                     className="inline-flex items-center gap-1.5 text-xs font-medium bg-rose-50 text-rose-500 hover:bg-rose-100 rounded-lg px-3 py-1.5 transition-colors"
                                                 >
                                                     <Trash2 size={12} /> Delete
@@ -451,6 +487,38 @@ export default function PayrollDashboard() {
                                 </div>
                             </div>
 
+
+                            {/* PAYMENT STATUS */}
+                            <div>
+                                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                                    Payment Status
+                                </label>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setForm({ ...form, isPaid: true })}
+                                        className={`flex-1 py-2.5 rounded-xl text-sm font-medium border transition ${form.isPaid
+                                            ? "bg-green-200 border-green-200 text-green-600"
+                                            : "bg-white border-slate-200 text-slate-500"
+                                            }`}
+                                    >
+                                        Paid
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => setForm({ ...form, isPaid: false })}
+                                        className={`flex-1 py-2.5 rounded-xl text-sm font-medium border transition ${!form.isPaid
+                                            ? "bg-amber-200 border-amber-200 text-amber-600"
+                                            : "bg-white border-slate-200 text-slate-500"
+                                            }`}
+                                    >
+                                        Pending
+                                    </button>
+                                </div>
+                            </div>
+
                             {/* Notes */}
                             <div>
                                 <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Notes</label>
@@ -480,6 +548,46 @@ export default function PayrollDashboard() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+
+            {deleteId && (
+                <div
+                    className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center"
+                    onClick={(e) => e.target === e.currentTarget && setDeleteId(null)}
+                >
+                    <div className="bg-white w-full max-w-sm rounded-2xl shadow-xl p-6">
+
+                        <h2 className="text-lg font-semibold text-slate-800 mb-2">
+                            Delete Payroll?
+                        </h2>
+
+                        <p className="text-sm text-slate-500 mb-6">
+                            Are you sure you want to delete this record? This action cannot be undone.
+                        </p>
+
+                        <div className="flex justify-end gap-2">
+
+                            <button
+                                onClick={() => setDeleteId(null)}
+                                className="px-4 py-2 text-sm bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={async () => {
+                                    await handleDelete(deleteId);
+                                    setDeleteId(null);
+                                }}
+                                className="px-4 py-2 text-sm bg-rose-500 hover:bg-rose-600 text-white rounded-xl"
+                            >
+                                Yes, Delete
+                            </button>
+
+                        </div>
                     </div>
                 </div>
             )}

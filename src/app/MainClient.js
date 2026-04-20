@@ -15,6 +15,10 @@ import { useSearchParams } from "next/navigation";
 import Leave from "@/components/Dashboard/Tabs/Leave";
 import EmployeesPage from "@/components/Dashboard/Tabs/Employee";
 import LottieWelcomeAnimation from "@/Animations/Welcome";
+import Notices from "@/components/Dashboard/Tabs/Notices";
+import Documents from "@/components/Dashboard/Tabs/Documents";
+import Settings from "@/components/Dashboard/Tabs/Setting";
+import Analytics from "@/components/Dashboard/Tabs/Analytics";
 
 
 export default function AdminPage() {
@@ -68,7 +72,7 @@ export default function AdminPage() {
                 if (role === "admin") {
                     router.replace("/");
                 } else if (role === "employee") {
-                    router.replace("/employee");
+                    router.replace("/profile");
                 } else {
                     localStorage.removeItem("token");
                     router.replace("/login");
@@ -104,14 +108,22 @@ export default function AdminPage() {
                 return <Attendance />;
             case "employees":
                 return <EmployeesPage />;
+            case "documents":
+                return <Documents />;
             case "expense":
                 return <Expense />;
             case "departments":
                 return <Department />;
             case "payroll":
                 return <Payroll />;
+            case "analytics":
+                return <Analytics />;
             case "leave":
                 return <Leave />;
+            case "settings":
+                return <Settings />;
+            case "notices":
+                return <Notices />;
 
             default:
                 return null;

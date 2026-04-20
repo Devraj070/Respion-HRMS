@@ -11,6 +11,8 @@ import LeavePage from "./Leave";
 import History from "./History";
 import Expenses from "./Expenses";
 import Payslip from "./payslip";
+import NoticeAlert from "./NoticeAlert";
+import LottieWelcomeAnimation from "@/Animations/Welcome";
 
 export default function ProfilePage() {
     const router = useRouter();
@@ -131,7 +133,7 @@ export default function ProfilePage() {
 
     if (loading) return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <LottieWelcomeAnimation />
         </div>
     );
 
@@ -169,6 +171,8 @@ export default function ProfilePage() {
                     <LogOut size={22} />
                 </button>
             </div>
+
+            <NoticeAlert />
             {/* 1. TOP BAR / HEADER */}
             {tab === "overview" || !tab ? (
                 <>
@@ -317,10 +321,10 @@ export default function ProfilePage() {
 
             ) : (
                 <div className="mt-6">
-                    {tab === "leave" && <LeavePage />}
-                    {tab === "history" && <History />}
-                    {tab === "expenses" && <Expenses />}
-                    {tab === "payslip" && <Payslip />}
+                    {tab === "leave" && <LeavePage user={user} />}
+                    {tab === "history" && <History user={user} />}
+                    {tab === "expenses" && <Expenses user={user} />}
+                    {tab === "payslip" && <Payslip user={user} />}
                 </div>
             )}
         </div>

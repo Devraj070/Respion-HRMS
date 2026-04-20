@@ -11,7 +11,7 @@ import {
     ChevronRight
 } from "lucide-react";
 
-export default function LeavePage() {
+export default function LeavePage({ user }) {
     const [leaves, setLeaves] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,7 +27,7 @@ export default function LeavePage() {
 
     const fetchLeaves = async () => {
         try {
-            const res = await fetch("/api/leave", {
+            const res = await fetch(`/api/leave/${user._id}`, {
                 headers: {
                     "x-api-key": API_KEY || "",
                     "Authorization": `Bearer ${localStorage.getItem("token")}`
@@ -49,7 +49,7 @@ export default function LeavePage() {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            const res = await fetch("/api/leave", {
+            const res = await fetch(`/api/leave/${user._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

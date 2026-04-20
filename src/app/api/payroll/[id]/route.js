@@ -5,15 +5,15 @@ import Payroll from "@/models/Payroll";
 export async function GET(req, { params }) {
     try {
         await connectionToDB();
-        const id = await params;
-        const payroll = await Payroll.findById(id?.id).populate({
+        const { id } = await params;
+        const payroll = await Payroll.findOne({ user: id }).populate({
             path: "user",
             select: "name email employeeId"
         });
 
         if (!payroll) {
             return NextResponse.json(
-                { error: "Payroll not found" },
+                { success: false, message: "Payroll not found" },
                 { status: 404 }
             );
         }
@@ -22,9 +22,10 @@ export async function GET(req, { params }) {
             success: true,
             data: payroll
         });
+
     } catch (err) {
         return NextResponse.json(
-            { error: err.message },
+            { success: false, message: err.message },
             { status: 500 }
         );
     }

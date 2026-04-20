@@ -147,7 +147,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Home,
     Users,
@@ -161,9 +161,13 @@ import {
     BarChart3,
     Settings,
     TimerOff,
-    TimerIcon
+    TimerIcon,
+    IndianRupee,
+    BellIcon,
+    Book
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Sidebar({
     sidebarOpen,
@@ -174,16 +178,60 @@ export default function Sidebar({
     user,
 }) {
     const [collapsed, setCollapsed] = useState(false);
+    const [companyId, setCompanyId] = useState(null);
+    const [form, setForm] = useState({
+        name: "",
+        description: "",
+        logo: "",
+    });
+    const [fetching, setFetching] = useState(true);
     const router = useRouter();
+
+
+
+    useEffect(() => {
+        const fetchCompany = async () => {
+            try {
+                const res = await fetch("/api/company",
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "no_key" // Ensure
+                        }
+                    }
+                );
+                const data = await res.json();
+
+                if (data?._id) {
+                    setCompanyId(data._id);
+                    setForm({
+                        name: data.name || "",
+                        description: data.description || "",
+                        logo: data.logo || "",
+                    });
+                }
+            } catch (err) {
+                console.error("Error fetching company:", err);
+            } finally {
+                setFetching(false);
+            }
+        };
+
+        fetchCompany();
+    }, []);
 
     const navItems = [
         { key: "dashboard", label: "Dashboard", icon: Home },
         { key: "attendance", label: "Attendance", icon: CalendarCheck },
         { key: "employees", label: "Employees", icon: Users },
+        { key: "documents", label: "Documents", icon: Book },
         { key: "departments", label: "Departments", icon: Building2 },
         { key: "payroll", label: "Payroll", icon: Wallet },
-        { key: "analytics", label: "Analytics", icon: BarChart3 }, // ✅ NEW
-        { key: "leave", label: "Leave Requests", icon: TimerIcon }, // ✅ NEW
+        { key: "analytics", label: "Analytics", icon: BarChart3 },
+        { key: "leave", label: "Leave Requests", icon: TimerIcon },
+        { key: "expense", label: "Expenses", icon: IndianRupee },
+        { key: "notices", label: "Notices", icon: BellIcon },
+
     ];
 
     return (
@@ -206,16 +254,18 @@ export default function Sidebar({
                 <div className="h-16 flex items-center justify-between px-3 border-b border-gray-300">
                     <div className="flex items-center gap-3 overflow-hidden">
                         {/* Logo */}
-                        <img
-                            src="https://th.bing.com/th/id/OIP.XrGVljajcLZhvJGUD-Sc7gHaE7?w=291&h=194&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" // 👉 replace with your logo path
-                            alt="logo"
-                            className="w-10 h-10 rounded-lg object-cover"
+                        <Image
+                            src={form?.logo || "/logo.png"}
+                            alt="Company Logo"
+                            width={36}
+                            height={36}
+                            className="rounded-full object-cover"
                         />
 
                         {!collapsed && (
                             <div>
                                 <h1 className="text-sm font-semibold text-gray-900">
-                                    Your Company
+                                    {form.name || "Company Name"}
                                 </h1>
                                 <p className="text-xs text-gray-500">
                                     {user?.name || "Admin Panel"}

@@ -167,7 +167,7 @@ export default function PWAInstallModal({ onInstalled }) {
 
     const handleInstall = async () => {
         if (!deferredPrompt) {
-            alert("Use Chrome to install this app");
+            alert("Use App Now!");
             return;
         }
 

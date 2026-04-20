@@ -1,85 +1,80 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/DB_CONNECTION";
 import Leave from "@/models/Leave";
+import { getUserFromToken } from "@/lib/getUserFromToken";
 
-// 📦 GET single leave
-export async function GET(req, { params }) {
+export async function GET(req) {
     try {
         await connectToDatabase();
 
-        const leave = await Leave.findById(params.id).populate({
-            path: "user",
-            select: "name email employeeId"
-        });
+        const user = getUserFromToken(req);
 
-        if (!leave) {
+        if (!user) {
             return NextResponse.json(
-                { error: "Leave not found" },
-                { status: 404 }
+                { success: false, message: "Unauthorized" },
+                { status: 401 }
             );
         }
 
+        const leaves = await Leave.find({ user: user.id })
+            .sort({ createdAt: -1 });
+
         return NextResponse.json({
             success: true,
-            data: leave
+            data: leaves
         });
 
     } catch (err) {
         return NextResponse.json(
-            { error: err.message },
+            { success: false, message: "Internal Server Error" },
             { status: 500 }
         );
     }
 }
 
-// ✏️ UPDATE LEAVE (Admin: approve/reject)
-export async function PUT(req, { params }) {
+export async function POST(req) {
     try {
         await connectToDatabase();
+
+        const user = getUserFromToken(req);
+
+        if (!user) {
+            return NextResponse.json(
+                { success: false, message: "Unauthorized" },
+                { status: 401 }
+            );
+        }
 
         const body = await req.json();
 
-        const updateData = {
-            status: body.status,
-        };
+        const { type, fromDate, toDate, reason } = body;
 
-        const leave = await Leave.findByIdAndUpdate(
-            params.id,
-            updateData,
-            { new: true }
-        ).populate({
-            path: "user",
-            select: "name email employeeId"
+        // 🧠 VALIDATION
+        if (!type || !fromDate || !toDate) {
+            return NextResponse.json(
+                { success: false, message: "Missing required fields" },
+                { status: 400 }
+            );
+        }
+
+        const newLeave = await Leave.create({
+            user: user.id,
+            type,
+            fromDate: new Date(fromDate),
+            toDate: new Date(toDate),
+            reason,
+            status: "pending"
         });
 
         return NextResponse.json({
             success: true,
-            data: leave
-        });
+            message: "Leave request submitted",
+            data: newLeave
+        }, { status: 201 });
 
     } catch (err) {
         return NextResponse.json(
-            { error: err.message },
-            { status: 500 }
-        );
-    }
-}
-
-// ❌ DELETE leave
-export async function DELETE(req, { params }) {
-    try {
-        await connectToDatabase();
-
-        await Leave.findByIdAndDelete(params.id);
-
-        return NextResponse.json({
-            success: true,
-            message: "Leave deleted"
-        });
-
-    } catch (err) {
-        return NextResponse.json(
-            { error: err.message },
+            { success: false, message: "Could not submit leave" },
             { status: 500 }
         );
     }
