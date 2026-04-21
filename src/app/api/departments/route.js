@@ -1,25 +1,3 @@
-// import connectToDatabase from "@/lib/DB_CONNECTION";
-// import Department from "@/models/Department";
-
-// export async function GET() {
-//     try {
-//         await connectToDatabase();
-
-//         const departments = await Department.find().sort({ createdAt: -1 });
-
-//         return Response.json({
-//             success: true,
-//             data: departments
-//         });
-
-//     } catch (err) {
-//         return Response.json({
-//             success: false,
-//             message: err.message
-//         }, { status: 500 });
-//     }
-// }
-
 import connectToDatabase from "@/lib/DB_CONNECTION";
 import Department from "@/models/Department";
 import User from "@/models/User";

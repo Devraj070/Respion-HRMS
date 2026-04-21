@@ -24,7 +24,12 @@ const payrollSchema = new mongoose.Schema({
     paidAt: { type: Date, default: null },
 
     // 📝 Notes
-    notes: { type: String, default: "" }
+    notes: { type: String, default: "" },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
+
 
 }, { timestamps: true });
 

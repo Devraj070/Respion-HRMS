@@ -119,7 +119,7 @@ export default function AttendanceUI() {
                             {data.length > 0 ? data.map((item, i) => (
                                 <tr key={i} className="group hover:bg-slate-50/80 transition-colors">
                                     {/* Date */}
-                                    <td className="px-6 py-4">
+                                    <td className="px-6 py-4 min-w-40">
                                         <div className="flex flex-col">
                                             <span className="text-sm font-bold text-slate-700">
                                                 {new Date(item.date).toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}
@@ -131,7 +131,7 @@ export default function AttendanceUI() {
                                     </td>
 
                                     {/* Timing */}
-                                    <td className="px-6 py-4">
+                                    <td className="px-6 py-4 min-w-56">
                                         <div className="flex items-center gap-2">
                                             <span className="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-1 rounded-lg">
                                                 {item.checkIn ? new Date(item.checkIn).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "--:--"}

@@ -84,7 +84,7 @@ export default function LeavePage({ user }) {
 
                 {/* 1. UPMARKET FORM (Left Side) */}
                 <div className="lg:col-span-5">
-                    <div className="bg-white p-6 rounded-3xl border border-amber-200 shadow-sm sticky top-8">
+                    <div className="bg-white p-6 rounded-3xl  shadow-sm sticky top-8">
                         <div className="flex items-center gap-2 mb-6 text-indigo-600">
                             <FileText size={20} strokeWidth={2.5} />
                             <h2 className="font-bold text-lg text-gray-800">New Request</h2>

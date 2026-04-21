@@ -151,7 +151,7 @@ export default function ProfilePage() {
 
     return (
         <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8 bg-gray-50 min-h-screen">
-            <div className="flex flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl border border-blue-400 shadow-sm">
+            <div className="flex flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl  shadow-sm">
                 <div className="flex items-center gap-5">
                     <div className="w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-blue-200 shadow-lg">
                         {user.name?.charAt(0)}
@@ -180,7 +180,7 @@ export default function ProfilePage() {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                         {/* 2. ATTENDANCE SECTION (The Circle) */}
-                        <div className="bg-white p-8 rounded-3xl border border-blue-400 shadow-sm flex flex-col items-center justify-center space-y-6">
+                        <div className="bg-white p-8 rounded-3xl  shadow-sm flex flex-col items-center justify-center space-y-6">
                             <div className="text-center">
                                 <h3 className="font-bold text-gray-800 tracking-tight">Attendance Desk</h3>
                                 <p className="text-[10px] text-indigo-600 font-bold uppercase mt-1 tracking-widest flex items-center justify-center gap-1">
@@ -262,7 +262,7 @@ export default function ProfilePage() {
 
 
                             {/* User Details & Activity Log */}
-                            <div className="bg-white rounded-3xl border border-blue-400 shadow-sm overflow-hidden">
+                            <div className="bg-white rounded-3xl  shadow-sm overflow-hidden">
                                 <div className="p-6 border-b border-b-yellow-200 flex items-center justify-between bg-amber-50">
                                     <h3 className="font-bold flex items-center gap-2 text-gray-800">
                                         <Briefcase size={18} className="text-indigo-600" /> Work Profile

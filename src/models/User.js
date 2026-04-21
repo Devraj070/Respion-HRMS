@@ -46,6 +46,14 @@ const userSchema = new mongoose.Schema({
         ifsc: String,
         bankName: String,
         upiId: String
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
 
 }, { timestamps: true });
