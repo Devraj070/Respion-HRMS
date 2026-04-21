@@ -15,16 +15,20 @@ export const metadata = {
   title: "Attendance ",
   description: "A simple attendance management system ",
   manifest: "/manifest.json",
-  themeColor: "#000000",
+  themeColor: "#ffffff",
 };
 
 export const viewport = {
-  themeColor: "#000000",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased select-none`}
       >
