@@ -135,9 +135,15 @@ function EmployeeModal({ mode, form, departments, onChange, onNestedChange, onSu
                             <InputField label="Full Name" name="name" value={form.name} onChange={onChange} required />
                             <InputField label="Email Address" type="email" name="email" value={form.email} onChange={onChange} required />
                             <InputField label="Phone Number" name="phone" value={form.phone} onChange={onChange} />
-                            {mode === "add" && (
-                                <InputField label="Password" type="password" name="password" value={form.password} onChange={onChange} required />
-                            )}
+                            <InputField
+                                label="Password"
+                                type="password"
+                                name="password"
+                                value={form.password}
+                                onChange={onChange}
+                                required={mode === "add"}   // ✅ only required on add
+                                placeholder={mode === "edit" ? "Leave blank to keep current password" : ""}
+                            />
                             <div className="sm:col-span-2">
                                 <InputField label="Residential Address" name="address" value={form.address} onChange={onChange} />
                             </div>
