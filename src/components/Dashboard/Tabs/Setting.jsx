@@ -11,6 +11,7 @@ import {
     Globe,
     FileText
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function Settings() {
     const [form, setForm] = useState({
@@ -119,10 +120,11 @@ export default function Settings() {
             });
 
             if (res.ok) {
-                alert("Settings saved successfully");
+                toast.success("Settings saved successfully");
             }
         } catch (err) {
             console.error("Submit error:", err);
+            toast.error("Failed to save settings.");
         } finally {
             setLoading(false);
         }

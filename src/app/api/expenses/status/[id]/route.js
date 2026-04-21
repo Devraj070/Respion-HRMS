@@ -7,7 +7,7 @@ export async function PATCH(req, { params }) {
     try {
         await connectToDB();
 
-        const user = getUserFromToken(req);
+        const user = await getUserFromToken(req);
 
         if (!user || user.role !== "admin") {
             return NextResponse.json(

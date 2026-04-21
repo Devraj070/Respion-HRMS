@@ -7,7 +7,6 @@ export async function GET(req, { params }) {
     try {
         await connectToDatabase();
 
-        // const user = getUserFromToken(req);
 
         const { id } = await params;
         if (!id) {

@@ -8,7 +8,7 @@ export async function GET(req) {
         await connectToDatabase();
 
         // ✅ Get user from JWT
-        const userData = getUserFromToken(req);
+        const userData = await getUserFromToken(req);
 
         if (!userData) {
             return NextResponse.json(

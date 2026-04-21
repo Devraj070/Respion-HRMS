@@ -8,7 +8,7 @@ export async function POST(req) {
     try {
         await connectToDatabase();
 
-        const user = getUserFromToken(req);
+        const user = await getUserFromToken(req);
 
         if (!user) {
             return NextResponse.json({ success: false, message: "Unauthorized" });

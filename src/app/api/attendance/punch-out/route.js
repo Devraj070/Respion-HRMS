@@ -8,7 +8,7 @@ export async function POST(req) {
     try {
         await connectToDatabase();
 
-        const user = getUserFromToken(req);
+        const user = await getUserFromToken(req);
 
         if (!user) {
             return NextResponse.json({ success: false, message: "Unauthorized" });
@@ -26,10 +26,15 @@ export async function POST(req) {
         const end = new Date();
         end.setHours(23, 59, 59, 999);
 
+        // const record = await Attendance.findOne({
+        //     user: userId,
+        //     date: { $gte: start, $lte: end }
+        // });
+
         const record = await Attendance.findOne({
             user: userId,
-            date: { $gte: start, $lte: end }
-        });
+            checkOut: { $exists: false }
+        }).sort({ checkIn: -1 });
 
         if (!record) {
             return NextResponse.json({ success: false, message: "No punch-in found" });

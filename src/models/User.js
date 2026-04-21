@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
 
     department: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Department"
+        ref: "Department",
+        default: "000000000000000000000000"
     },
 
     designation: String,

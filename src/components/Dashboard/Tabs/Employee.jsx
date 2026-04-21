@@ -185,7 +185,7 @@ function EmployeeModal({ mode, form, departments, onChange, onNestedChange, onSu
                                         </option>
                                     ))
                                 ) : (
-                                    <option disabled>No departments found</option>
+                                    <option disabled>No departments found. Create new department in "Department" tab</option>
                                 )}
                             </select>
                         </div>
@@ -221,7 +221,7 @@ function EmployeeModal({ mode, form, departments, onChange, onNestedChange, onSu
                                     />
                                     <InputField
                                         label="IFSC Code"
-                                        className="uppercase"
+                                        // className="uppercase"
                                         value={form.bankDetails.ifsc}
                                         onChange={e => onNestedChange("bankDetails", "ifsc", e.target.value)}
                                     />

@@ -7,7 +7,8 @@ export async function GET(req) {
     try {
         await connectToDB();
 
-        const user = getUserFromToken(req);
+        const user = await getUserFromToken(req);
+        console.log(user);
 
         // 🔐 only admin can access
         if (!user || user.role !== "admin") {

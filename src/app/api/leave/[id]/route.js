@@ -7,7 +7,7 @@ export async function GET(req) {
     try {
         await connectToDatabase();
 
-        const user = getUserFromToken(req);
+        const user = await getUserFromToken(req);
 
         if (!user) {
             return NextResponse.json(
@@ -36,7 +36,7 @@ export async function POST(req) {
     try {
         await connectToDatabase();
 
-        const user = getUserFromToken(req);
+        const user = await getUserFromToken(req);
 
         if (!user) {
             return NextResponse.json(
@@ -65,6 +65,7 @@ export async function POST(req) {
             reason,
             status: "pending"
         });
+        console.log(newLeave);
 
         return NextResponse.json({
             success: true,

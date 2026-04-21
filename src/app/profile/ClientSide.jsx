@@ -26,35 +26,72 @@ export default function ProfilePage() {
     const [isPunchedIn, setIsPunchedIn] = useState(false);
     const [location, setLocation] = useState("");
     const [activityLog, setActivityLog] = useState([]);
+    const [attendance, setAttendance] = useState(null);
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                if (!token) return;
+    // useEffect(() => {
+    //     const fetchProfile = async () => {
+    //         try {
+    //             const token = localStorage.getItem("token");
+    //             if (!token) return;
 
-                const res = await fetch("/api/profile", {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                        'x-api-key': process.env.NEXT_PUBLIC_API_KEY
-                    }
-                });
-                const result = await res.json();
-                if (result.success) setUser(result.data);
-            } catch (err) {
-                console.error("Profile Fetch Error:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProfile();
-    }, []);
+    //             const res = await fetch("/api/profile", {
+    //                 headers: {
+    //                     "Authorization": `Bearer ${token}`,
+    //                     "Content-Type": "application/json",
+    //                     'x-api-key': process.env.NEXT_PUBLIC_API_KEY
+    //                 }
+    //             });
+    //             const result = await res.json();
+    //             if (result.success) setUser(result.data);
+    //         } catch (err) {
+    //             console.error("Profile Fetch Error:", err);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //     fetchProfile();
+    // }, []);
 
 
 
 
     // Helper: Get GPS Location and Reverse Geocode
+    const fetchProfile = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+
+            const res = await fetch("/api/profile", {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                    'x-api-key': process.env.NEXT_PUBLIC_API_KEY
+                }
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                setUser(result.data);
+
+                // ✅ SAVE ATTENDANCE PROPERLY
+                setAttendance(result.attendance);
+
+                setIsPunchedIn(result.attendance?.isPunchedIn || false);
+            }
+
+        } catch (err) {
+            console.error("Profile Fetch Error:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
+
+
+        fetchProfile();
+    }, []);
+
     const getVerifiedLocation = () => {
         return new Promise((resolve, reject) => {
             if (!navigator.geolocation) {
@@ -107,6 +144,7 @@ export default function ProfilePage() {
             const data = await res.json();
 
             if (data.success) {
+                fetchProfile(); // Refresh profile to get latest attendance
                 setIsPunchedIn(!isPunchedIn);
                 // Update local log
                 setActivityLog((prev) => [
@@ -114,6 +152,7 @@ export default function ProfilePage() {
                         type,
                         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                         address: currentAddress,
+                        setAttendance: data.attendance, // ✅ Update attendance state with latest record
                     },
                     ...prev,
                 ]);
@@ -181,12 +220,40 @@ export default function ProfilePage() {
 
                         {/* 2. ATTENDANCE SECTION (The Circle) */}
                         <div className="bg-white p-8 rounded-3xl  shadow-sm flex flex-col items-center justify-center space-y-6">
+                            {/* <p className="text-xs text-gray-900 p-4 font-bold bg-white rounded-2xl border border-slate-100 text-center">
+                                {isPunchedIn && attendance?.checkIn
+                                    ? `Punched in at ${new Date(attendance.checkIn).toLocaleTimeString()}`
+                                    : ""}
+                            </p> */}
+
+                            <div className="text-xs text-gray-700 font-medium space-y-1">
+                                {attendance?.checkIn && (
+                                    <p>
+                                        🟢 Punch In: {new Date(attendance.checkIn).toLocaleTimeString()}
+                                    </p>
+                                )}
+
+                                {attendance?.checkOut && (
+                                    <p>
+                                        🔴 Punch Out: {new Date(attendance.checkOut).toLocaleTimeString()}
+                                    </p>
+                                )}
+
+                                {!attendance?.checkOut && attendance?.checkIn && (
+                                    <p className="text-green-600 font-bold">
+                                        Currently Working ⏱️
+                                    </p>
+                                )}
+                            </div>
                             <div className="text-center">
                                 <h3 className="font-bold text-gray-800 tracking-tight">Attendance Desk</h3>
                                 <p className="text-[10px] text-indigo-600 font-bold uppercase mt-1 tracking-widest flex items-center justify-center gap-1">
                                     <MapPin size={10} /> GPS Verified
                                 </p>
                             </div>
+
+
+
 
                             {/* Punch Circle */}
                             <div className="relative group">

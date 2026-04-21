@@ -69,7 +69,7 @@ export async function POST(req) {
     try {
         await connectToDatabase();
 
-        const user = getUserFromToken(req);
+        const user = await getUserFromToken(req);
 
         if (!user?._id) {
             return NextResponse.json({

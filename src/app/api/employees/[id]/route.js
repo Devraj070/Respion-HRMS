@@ -56,12 +56,50 @@ export async function PUT(req, { params }) {
 }
 
 // DELETE
+// export async function DELETE(req, { params }) {
+//     try {
+//         await connectToDatabase();
+//         const id = await params;
+
+//         const user = await User.findByIdAndDelete(id.id);
+
+//         if (!user) {
+//             return NextResponse.json(
+//                 { success: false, message: "User not found" },
+//                 { status: 404 }
+//             );
+//         }
+
+//         return NextResponse.json(
+//             { success: true, message: "Deleted successfully" }
+//         );
+
+//     } catch (error) {
+//         return NextResponse.json(
+//             { success: false, message: error.message },
+//             { status: 500 }
+//         );
+//     }
+// }
+
+
+// Soft Delete
+
+
 export async function DELETE(req, { params }) {
     try {
         await connectToDatabase();
-        const id = await params;
 
-        const user = await User.findByIdAndDelete(id.id);
+        const { id } = await params; // ✅ correct way
+
+
+
+        // 🔄 SOFT DELETE (instead of removing)
+        const user = await User.findByIdAndUpdate(
+            id,
+            { isDeleted: true },
+            { returnDocument: 'after' }
+        );
 
         if (!user) {
             return NextResponse.json(
@@ -70,13 +108,16 @@ export async function DELETE(req, { params }) {
             );
         }
 
-        return NextResponse.json(
-            { success: true, message: "Deleted successfully" }
-        );
+        return NextResponse.json({
+            success: true,
+            message: "User deleted successfully (soft delete)",
+        });
 
     } catch (error) {
+        console.error("DELETE_USER_ERROR:", error);
+
         return NextResponse.json(
-            { success: false, message: error.message },
+            { success: false, message: "Internal server error" },
             { status: 500 }
         );
     }

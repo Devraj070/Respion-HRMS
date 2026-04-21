@@ -10,6 +10,7 @@ import {
     AlertCircle,
     ChevronRight
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function LeavePage({ user }) {
     const [leaves, setLeaves] = useState([]);
@@ -61,11 +62,12 @@ export default function LeavePage({ user }) {
 
             if (res.ok) {
                 fetchLeaves();
+                toast.success("Leave application submitted successfully!");
                 setForm({ type: "", fromDate: "", toDate: "", reason: "" });
-                alert("Leave application submitted successfully!");
             }
         } catch (err) {
             console.error(err);
+            toast.error("Failed to submit leave application.");
         } finally {
             setIsSubmitting(false);
         }

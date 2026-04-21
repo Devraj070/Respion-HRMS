@@ -7,7 +7,7 @@ export async function PATCH(req, { params }) {
     try {
         await connectToDatabase();
 
-        const user = getUserFromToken(req);
+        const user = await getUserFromToken(req);
 
         if (!user || user.role !== "admin") {
             return NextResponse.json(
@@ -52,7 +52,7 @@ export async function DELETE(req, { params }) {
     try {
         await connectToDatabase();
 
-        const user = getUserFromToken(req);
+        const user = await getUserFromToken(req);
 
         if (!user || user.role !== "admin") {
             return NextResponse.json(

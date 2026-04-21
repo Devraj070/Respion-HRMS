@@ -65,7 +65,7 @@ export async function POST(req) {
         }
 
         // 🔐 LOGIN FLOW
-        const user = await User.findOne({ email }).populate("department");
+        const user = await User.findOne({ email, isDeleted: { $ne: true } }).populate("department");
 
         if (!user) {
             return NextResponse.json(
