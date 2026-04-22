@@ -177,9 +177,7 @@ export default function Login() {
                         </form>
                     </div>
 
-                    <p className="text-center text-slate-400 text-xs">
-                        Developed by <span className="font-bold text-slate-600">SpiderVision Systems</span>
-                    </p>
+
                 </div>
             </div>
 
