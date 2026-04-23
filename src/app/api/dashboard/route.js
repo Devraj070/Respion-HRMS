@@ -4,6 +4,7 @@ import Company from "@/models/Company";
 import Attendance from "@/models/Attendance";
 import '@/models/Company';
 import '@/models/Attendance';
+import '@/models/User';
 
 export async function GET() {
     await connectToDatabase();
@@ -21,7 +22,7 @@ export async function GET() {
 
         // 🕒 TODAY ATTENDANCE ONLY
         const attendance = await Attendance.find({
-            createdAt: { $gte: start, $lte: end }
+            date: { $gte: start, $lte: end }
         })
             .populate("user", "name email")
             .sort({ createdAt: -1 });

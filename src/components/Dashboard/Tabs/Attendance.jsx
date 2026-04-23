@@ -307,7 +307,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { RefreshCw, MapPin, CalendarDays, Clock, User } from "lucide-react";
+import { RefreshCw, MapPin, CalendarDays, Clock, User, Loader2 } from "lucide-react";
 
 export default function AttendancePage() {
     const [attendance, setAttendance] = useState([]);
@@ -412,7 +412,11 @@ export default function AttendancePage() {
     }
 
 
-
+    if (loading) return (
+        <div className="flex h-screen items-center justify-center bg-white">
+            <Loader2 className="animate-spin text-indigo-600" size={32} />
+        </div>
+    );
     return (
         <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8">
             <div className="max-w-9xl mx-auto">
