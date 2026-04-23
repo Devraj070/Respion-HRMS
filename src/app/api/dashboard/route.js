@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/DB_CONNECTION";
 import Company from "@/models/Company";
 import Attendance from "@/models/Attendance";
+import '@/models/Company';
+import '@/models/Attendance';
 
 export async function GET() {
     await connectToDatabase();

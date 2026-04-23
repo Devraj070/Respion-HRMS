@@ -7,7 +7,6 @@ export async function POST(req) {
         await connectToDatabase();
 
         const body = await req.json();
-        console.log("Body", body);
 
         const doc = await Document.create({
             user: body.user,

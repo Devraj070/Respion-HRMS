@@ -18,7 +18,6 @@ export async function PATCH(req, { params }) {
         }
 
         const body = await req.json();
-        console.log("BODY:", body);
 
         const updated = await Company.findByIdAndUpdate(
             id,

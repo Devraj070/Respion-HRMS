@@ -42,7 +42,6 @@ export async function GET(req) {
             .populate("user", "name phone designation") // Populate user details
             .sort({ date: -1 }); // Sort by date descending
 
-        console.log(data);
 
         return NextResponse.json({
             success: true,

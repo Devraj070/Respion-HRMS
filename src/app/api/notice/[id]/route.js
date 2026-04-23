@@ -18,7 +18,6 @@ export async function PATCH(req, { params }) {
 
         const { id } = await params;
 
-        console.log(id);
 
         const body = await req.json();
 
@@ -62,7 +61,6 @@ export async function DELETE(req, { params }) {
         }
 
         const { id } = await params;
-        console.log(id);
 
         const deleted = await Notice.findByIdAndDelete(id);
 

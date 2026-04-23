@@ -45,7 +45,6 @@ export async function GET(req) {
         await connectToDatabase();
 
         const decoded = await getUserFromToken(req); // ✅ FIX (async)
-        console.log("455");
 
         if (!decoded || !decoded.id) {
             return NextResponse.json(
@@ -53,7 +52,6 @@ export async function GET(req) {
                 { status: 401 }
             );
         }
-        console.log("15");
 
         const userId = new mongoose.Types.ObjectId(decoded.id);
 

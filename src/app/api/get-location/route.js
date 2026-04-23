@@ -44,7 +44,6 @@ export async function GET(req) {
             .filter(Boolean)
             .join(", ");
 
-        console.log(address);
 
 
         return Response.json({

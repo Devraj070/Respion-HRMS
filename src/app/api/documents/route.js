@@ -13,7 +13,6 @@ export async function GET() {
             })
             .sort({ createdAt: -1 });
 
-        console.log("FETCHED_DOCUMENTS:", docs);
         return NextResponse.json({
             success: true,
             data: docs,

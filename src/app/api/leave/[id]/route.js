@@ -65,7 +65,6 @@ export async function POST(req) {
             reason,
             status: "pending"
         });
-        console.log(newLeave);
 
         return NextResponse.json({
             success: true,
