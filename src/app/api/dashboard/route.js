@@ -21,7 +21,7 @@ export async function GET() {
 
         // 🕒 TODAY ATTENDANCE ONLY
         const attendance = await Attendance.find({
-            date: { $gte: start, $lte: end }
+            createdAt: { $gte: start, $lte: end }
         })
             .populate("user", "name email")
             .sort({ createdAt: -1 });
