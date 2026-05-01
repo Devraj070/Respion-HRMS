@@ -164,7 +164,8 @@ import {
     TimerIcon,
     IndianRupee,
     BellIcon,
-    Book
+    Book,
+    Coins
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -229,8 +230,9 @@ export default function Sidebar({
         { key: "payroll", label: "Payroll", icon: Wallet },
         { key: "analytics", label: "Analytics", icon: BarChart3 },
         { key: "leave", label: "Leave Requests", icon: TimerIcon },
-        { key: "expense", label: "Expenses", icon: IndianRupee },
+        { key: "expense", label: "Expenses", icon: Coins },
         { key: "notices", label: "Notices", icon: BellIcon },
+        { key: "advances", label: "Advances", icon: IndianRupee }
 
     ];
 
