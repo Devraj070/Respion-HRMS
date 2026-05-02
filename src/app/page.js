@@ -1,20 +1,3 @@
-// import React, { Suspense } from 'react'
-// import AdminPage from './MainClient'
-// import LottieWelcomeAnimation from '@/Animations/Welcome'
-
-// const page = () => {
-//   return (
-//     <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-gray-100">
-//       <LottieWelcomeAnimation />
-//     </div>}>
-
-//       <AdminPage />
-//     </Suspense>
-//   )
-// }
-
-// export default page
-
 "use client";
 
 import React, { Suspense, useState } from "react";
