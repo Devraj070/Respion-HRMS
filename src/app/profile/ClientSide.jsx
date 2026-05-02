@@ -453,6 +453,7 @@ import Expenses from "./Expenses";
 import Payslip from "./payslip";
 import NoticeAlert from "./NoticeAlert";
 import LottieWelcomeAnimation from "@/Animations/Welcome";
+import Advances from "./Advances";
 
 export default function ProfilePage() {
     const router = useRouter();
@@ -758,9 +759,9 @@ export default function ProfilePage() {
 
                                 <ActionButton
                                     icon={<FileText className="text-purple-500" />}
-                                    label="Payslip"
+                                    label="Advances"
                                     color="bg-purple-50"
-                                    onClick={() => handleAction('payslip')}
+                                    onClick={() => handleAction('advances')}
                                 />
 
                                 <ActionButton
@@ -776,6 +777,13 @@ export default function ProfilePage() {
                                     color="bg-emerald-50"
                                     onClick={() => handleAction('expenses')}
                                 />
+
+                                {/* <ActionButton
+                                    icon={<Wallet className="text-emerald-600" />}
+                                    label="Payslip"
+                                    color="bg-emerald-50"
+                                    onClick={() => handleAction('payslip')}
+                                /> */}
 
 
                             </div>
@@ -845,7 +853,9 @@ export default function ProfilePage() {
                     {tab === "leave" && <LeavePage user={user} />}
                     {tab === "history" && <History user={user} />}
                     {tab === "expenses" && <Expenses user={user} />}
-                    {tab === "payslip" && <Payslip user={user} />}
+                    {/* {tab === "payslip" && <Payslip user={user} />} */}
+                    {tab === "advances" && <Advances user={user} />}
+
                 </div>
             )}
 

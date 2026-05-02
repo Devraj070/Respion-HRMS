@@ -165,7 +165,8 @@ import {
     IndianRupee,
     BellIcon,
     Book,
-    Coins
+    Coins,
+    Download
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -225,14 +226,15 @@ export default function Sidebar({
         { key: "dashboard", label: "Dashboard", icon: Home },
         { key: "attendance", label: "Attendance", icon: CalendarCheck },
         { key: "employees", label: "Employees", icon: Users },
-        { key: "documents", label: "Documents", icon: Book },
-        { key: "departments", label: "Departments", icon: Building2 },
-        { key: "payroll", label: "Payroll", icon: Wallet },
-        { key: "analytics", label: "Analytics", icon: BarChart3 },
+        // { key: "documents", label: "Documents", icon: Book },
+        // { key: "departments", label: "Departments", icon: Building2 },
+        // { key: "payroll", label: "Payroll", icon: Wallet },
+        // { key: "analytics", label: "Analytics", icon: BarChart3 },
         { key: "leave", label: "Leave Requests", icon: TimerIcon },
         { key: "expense", label: "Expenses", icon: Coins },
         { key: "notices", label: "Notices", icon: BellIcon },
-        { key: "advances", label: "Advances", icon: IndianRupee }
+        { key: "advances", label: "Advances", icon: IndianRupee },
+        { key: "download", label: "Download Report", icon: Download }
 
     ];
 

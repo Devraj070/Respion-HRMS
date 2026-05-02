@@ -20,6 +20,7 @@ import Documents from "@/components/Dashboard/Tabs/Documents";
 import Settings from "@/components/Dashboard/Tabs/Setting";
 import Analytics from "@/components/Dashboard/Tabs/Analytics";
 import AdvancePage from "@/components/Dashboard/Tabs/Advances";
+import DownloadReport from "@/components/Dashboard/Tabs/DownloadReport";
 
 
 export default function AdminPage() {
@@ -127,6 +128,8 @@ export default function AdminPage() {
                 return <Notices />;
             case "advances":
                 return <AdvancePage />;
+            case "download":
+                return <DownloadReport />;
 
             default:
                 return null;
