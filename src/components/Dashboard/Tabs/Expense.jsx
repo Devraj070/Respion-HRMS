@@ -180,7 +180,7 @@ export default function ExpenseManagement() {
                                                     </td>
                                                     <td className="px-6 py-5">
                                                         <p className="text-sm text-slate-800 font-medium">{exp.category}</p>
-                                                        <p className="text-sm text-slate-400 truncate max-w-[200px]">{exp.description}</p>
+                                                        <p className="text-sm text-slate-400 ">{exp.description}</p>
                                                     </td>
                                                     <td className="px-6 py-5">
                                                         <p className="text-slate-900 font-bold">₹{exp.amount.toLocaleString()}</p>
@@ -222,6 +222,7 @@ export default function ExpenseManagement() {
                                                     <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">Amount</label>
                                                     <p className="text-sm font-bold text-slate-900">₹{exp.amount.toLocaleString()}</p>
                                                 </div>
+                                                <p className="text-sm text-slate-400  ">{exp.description}</p>
                                             </div>
 
                                             <div className="flex justify-end gap-2 pt-1">
