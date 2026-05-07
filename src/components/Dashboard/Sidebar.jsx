@@ -232,7 +232,7 @@ export default function Sidebar({
         // { key: "analytics", label: "Analytics", icon: BarChart3 },
         { key: "leave", label: "Leave Requests", icon: TimerIcon },
         { key: "expense", label: "Expenses", icon: Coins },
-        { key: "notices", label: "Notices", icon: BellIcon },
+        // { key: "notices", label: "Notices", icon: BellIcon },
         { key: "advances", label: "Advances", icon: IndianRupee },
         { key: "download", label: "Download Report", icon: Download }
 
