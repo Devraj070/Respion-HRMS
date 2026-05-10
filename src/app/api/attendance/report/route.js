@@ -1,5 +1,7 @@
 import Attendance from "@/models/Attendance";
 import connectToDatabase from "@/lib/DB_CONNECTION";
+import "@/models/Attendance";
+
 
 
 export async function GET(req) {
