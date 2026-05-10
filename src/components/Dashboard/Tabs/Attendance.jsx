@@ -308,6 +308,7 @@
 
 import { useEffect, useState } from "react";
 import { RefreshCw, MapPin, CalendarDays, Clock, User, Loader2 } from "lucide-react";
+import MonthlyReportDownloader from "@/components/reuseble-components/MonthlyReportDownloader";
 
 export default function AttendancePage() {
     const [attendance, setAttendance] = useState([]);
@@ -436,6 +437,8 @@ export default function AttendancePage() {
                         <button onClick={() => setDate("")} className="bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 transition">
                             Reset
                         </button>
+
+                        <MonthlyReportDownloader />
                     </div>
                 </div>
 
