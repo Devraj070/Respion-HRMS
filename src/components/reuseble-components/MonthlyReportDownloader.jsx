@@ -748,10 +748,10 @@ export default function MonthlyReportDownloader() {
             {/* TRIGGER BUTTON */}
             <button
                 onClick={() => setIsModalOpen(true)}
-                className="group flex items-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl shadow-md transition-all active:scale-95 border border-indigo-500/20"
+                className="bg-blue-400 border border-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-950 transition flex justify-center items-center gap-2 text-white"
             >
-                <div className="bg-white/20 p-1.5 rounded-lg group-hover:bg-white/30 transition-colors">
-                    <Download className="w-4 h-4" />
+                <div className="bg-white/20 p-1.5 rounded-full group-hover:bg-white/30 transition-colors animate-pulse">
+                    <Download className="w-4 h-4 " />
                 </div>
                 <span className="font-semibold text-sm tracking-wide">Monthly Report</span>
             </button>
