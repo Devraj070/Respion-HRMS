@@ -21,6 +21,7 @@ import Settings from "@/components/Dashboard/Tabs/Setting";
 import Analytics from "@/components/Dashboard/Tabs/Analytics";
 import AdvancePage from "@/components/Dashboard/Tabs/Advances";
 import DownloadReport from "@/components/Dashboard/Tabs/DownloadReport";
+import OverdueMessage from "@/components/OverdueMessage";
 
 
 export default function AdminPage() {
@@ -162,7 +163,7 @@ export default function AdminPage() {
 
                 {/* Main content */}
                 <main className="flex-1 flex flex-col ">
-
+                    <OverdueMessage />
                     <Topbar
                         setSidebarOpen={setSidebarOpen}
                         logout={handleLogout}
