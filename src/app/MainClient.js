@@ -163,7 +163,7 @@ export default function AdminPage() {
 
                 {/* Main content */}
                 <main className="flex-1 flex flex-col ">
-                    <OverdueMessage />
+                    {/* <OverdueMessage /> */}
                     <Topbar
                         setSidebarOpen={setSidebarOpen}
                         logout={handleLogout}
