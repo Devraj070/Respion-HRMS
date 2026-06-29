@@ -45,7 +45,7 @@ export async function POST(req) {
                     email: newUser.email,
                 },
                 process.env.JWT_SECRET,
-                { expiresIn: "1d" }
+                { expiresIn: "7d" }
             );
 
             return NextResponse.json(

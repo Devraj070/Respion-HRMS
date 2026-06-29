@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import TopAnnouncement from "@/components/reuseble-components/TopAnnouncement";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased select-none`}
       >
+        <TopAnnouncement
+          message="From Now employees who need an advance payment, he/she should enter the required amount in the Advance tab. Thank You."
+        />
         {children}
       </body>
     </html>

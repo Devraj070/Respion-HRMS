@@ -636,15 +636,15 @@ export default function ProfilePage() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8 bg-gray-50 min-h-screen">
-            <div className="flex flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl  shadow-sm">
-                <div className="flex items-center gap-5">
-                    <div className="w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-blue-200 shadow-lg">
+        <div className="max-w-full mx-auto p-0 md:p-0 space-y-8 bg-gray-50 min-h-screen">
+            <div className="flex flex-row justify-between items-start md:items-center gap-6 bg-white p-6 rounded-b-3xl  shadow-sm">
+                <div className="flex items-center gap-2">
+                    <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-blue-200 shadow-lg">
                         {user.name?.charAt(0)}
                     </div>
                     <div>
-                        <h1 className="text-xl font-bold text-gray-900">{user.name}</h1>
-                        <p className="text-gray-500 text-sm font-medium">
+                        <h1 className="text-sm font-bold text-gray-900">{user.name}</h1>
+                        <p className="text-gray-500 text-xs font-medium">
                             {user.designation || "Staff"} • {user.employeeId || "No ID"}
                         </p>
                     </div>
@@ -654,7 +654,7 @@ export default function ProfilePage() {
                     className="p-3 bg-red-100 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
                     title="Logout"
                 >
-                    <LogOut size={22} />
+                    <LogOut size={20} />
                 </button>
             </div>
 
