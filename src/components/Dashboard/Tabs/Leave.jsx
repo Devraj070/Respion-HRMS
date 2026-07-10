@@ -160,6 +160,8 @@ import {
     Clock
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import { TableSkeleton } from "@/components/Skeleton";
+import Pagination from "@/components/Pagination";
 
 export default function AdminLeave() {
     const [leaves, setLeaves] = useState([]);
@@ -167,18 +169,35 @@ export default function AdminLeave() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
 
-    const fetchLeaves = async () => {
+    // Pagination states
+    const [page, setPage] = useState(1);
+    const [limit] = useState(10);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+
+    const fetchLeaves = async (currentPage = page, searchQueryVal = searchQuery, selectedDateVal = selectedDate) => {
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch("/api/leave", {
+            let url = `/api/leave?page=${currentPage}&limit=${limit}`;
+            if (searchQueryVal) {
+                url += `&search=${encodeURIComponent(searchQueryVal)}`;
+            }
+            if (selectedDateVal) {
+                url += `&date=${selectedDateVal}`;
+            }
+            const res = await fetch(url, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'x-api-key': process.env.NEXT_PUBLIC_API_KEY || ""
                 }
             });
             const data = await res.json();
-            if (data.success) setLeaves(data.data);
+            if (data.success) {
+                setLeaves(data.data);
+                setTotalPages(data.pages || 1);
+                setTotalItems(data.total || data.data.length);
+            }
         } catch (err) {
             toast.error("Failed to load leave requests");
         } finally {
@@ -186,7 +205,18 @@ export default function AdminLeave() {
         }
     };
 
-    useEffect(() => { fetchLeaves(); }, []);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setPage(1);
+            fetchLeaves(1, searchQuery, selectedDate);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [searchQuery, selectedDate]);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        fetchLeaves(newPage, searchQuery, selectedDate);
+    };
 
     // Date grouping helper
     const getGroupLabel = (dateStr) => {
@@ -202,23 +232,14 @@ export default function AdminLeave() {
     };
 
     const groupedLeaves = useMemo(() => {
-        const filtered = leaves.filter(leave => {
-            const createdDate = new Date(leave.createdAt).toISOString().split('T')[0];
-            const matchesDate = selectedDate ? createdDate === selectedDate : true;
-            const matchesSearch =
-                leave.user?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                leave.type?.toLowerCase().includes(searchQuery.toLowerCase());
-            return matchesDate && matchesSearch;
-        });
-
         const groups = {};
-        filtered.forEach(leave => {
+        leaves.forEach(leave => {
             const label = getGroupLabel(leave.createdAt);
             if (!groups[label]) groups[label] = [];
             groups[label].push(leave);
         });
         return groups;
-    }, [leaves, searchQuery, selectedDate]);
+    }, [leaves]);
 
     const updateStatus = async (id, status) => {
         const loadingToast = toast.loading(`Updating status...`);
@@ -244,7 +265,15 @@ export default function AdminLeave() {
     };
 
     if (loading && leaves.length === 0) {
-        return <div className="flex h-screen items-center justify-center bg-[#FBFBFE]"><Loader2 className="animate-spin text-indigo-500" /></div>;
+        return (
+            <div className="p-4 md:p-8 bg-[#FBFBFE] min-h-screen text-slate-600">
+                <div className="max-w-9xl mx-auto space-y-6">
+                    <div className="h-10 bg-slate-200 rounded-xl w-48 animate-pulse"></div>
+                    <div className="h-12 bg-slate-100 rounded-2xl w-full animate-pulse"></div>
+                    <TableSkeleton />
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -416,6 +445,18 @@ export default function AdminLeave() {
                         </div>
                     )}
                 </div>
+
+                {!loading && (
+                    <div className="mt-8">
+                        <Pagination
+                            page={page}
+                            totalPages={totalPages}
+                            totalItems={totalItems}
+                            limit={limit}
+                            onPageChange={handlePageChange}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

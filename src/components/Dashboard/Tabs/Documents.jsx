@@ -706,6 +706,7 @@ import {
     Search
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import { CardListSkeleton } from "@/components/Skeleton";
 
 export default function DocumentsPage() {
     const [users, setUsers] = useState([]);
@@ -942,7 +943,7 @@ export default function DocumentsPage() {
                         </div>
 
                         {loading ? (
-                            <div className="py-20 flex justify-center"><Loader2 className="animate-spin text-slate-200" size={40} /></div>
+                            <CardListSkeleton count={4} />
                         ) : (
                             <div className="space-y-3">
                                 {Object.values(grouped).map((group) => (

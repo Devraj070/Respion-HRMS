@@ -12,6 +12,7 @@ import {
     FileText
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { FormSkeleton } from "@/components/Skeleton";
 
 export default function Settings() {
     const [form, setForm] = useState({
@@ -132,8 +133,17 @@ export default function Settings() {
 
     if (fetching) {
         return (
-            <div className="flex h-screen items-center justify-center bg-slate-50 text-slate-500 font-medium">
-                <Loader2 className="animate-spin mr-2" /> Loading Organization Setup...
+            <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8 lg:p-12">
+                <div className="mx-auto max-w-6xl space-y-6">
+                    <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 bg-slate-200 rounded-2xl animate-pulse"></div>
+                        <div className="space-y-2">
+                            <div className="h-5 bg-slate-300 rounded-md w-48 animate-pulse"></div>
+                            <div className="h-3 bg-slate-200 rounded-md w-32 animate-pulse"></div>
+                        </div>
+                    </div>
+                    <FormSkeleton />
+                </div>
             </div>
         );
     }

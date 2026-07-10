@@ -1,5 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import { CardListSkeleton } from "@/components/Skeleton";
+import Pagination from "@/components/Pagination";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 const PlusIcon = () => (
@@ -271,6 +273,12 @@ export default function EmployeesPage() {
     const [expandedId, setExpandedId] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null); // emp object
     const [departments, setDepartments] = useState([]);
+    
+    // Pagination states
+    const [page, setPage] = useState(1);
+    const [limit] = useState(10);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
     // ── API Helpers ──────────────────────────────────────────────────────────
     const apiFetch = (path, opts = {}) =>
         fetch(path, {
@@ -282,11 +290,15 @@ export default function EmployeesPage() {
             },
         }).then(r => r.json());
 
-    const fetchEmployees = async () => {
+    const fetchEmployees = async (currentPage = page, searchQuery = search) => {
         setIsLoading(true);
         try {
-            const data = await apiFetch("/api/employees");
-            if (data.success) setEmployees(data.data);
+            const data = await apiFetch(`/api/employees?page=${currentPage}&limit=${limit}&search=${encodeURIComponent(searchQuery)}`);
+            if (data.success) {
+                setEmployees(data.data);
+                setTotalPages(data.pages || 1);
+                setTotalItems(data.total || data.data.length);
+            }
         } catch (err) {
             console.error("Fetch failed:", err);
         } finally {
@@ -302,7 +314,22 @@ export default function EmployeesPage() {
         }
     };
 
-    useEffect(() => { fetchEmployees(); fetchDepartments() }, []);
+    useEffect(() => {
+        fetchDepartments();
+    }, []);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setPage(1);
+            fetchEmployees(1, search);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [search]);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        fetchEmployees(newPage, search);
+    };
 
     // ── Form Handlers ────────────────────────────────────────────────────────
     const handleChange = e => {
@@ -381,16 +408,7 @@ export default function EmployeesPage() {
     };
 
     // ── Derived Data ─────────────────────────────────────────────────────────
-    const filtered = employees.filter(emp => {
-        const matchRole = filterRole === "all" || emp.role === filterRole;
-        const q = search.toLowerCase();
-        const matchSearch = !q ||
-            emp.name.toLowerCase().includes(q) ||
-            emp.email.toLowerCase().includes(q) ||
-            (emp.designation || "").toLowerCase().includes(q) ||
-            (emp.employeeId || "").toLowerCase().includes(q);
-        return matchRole && matchSearch;
-    });
+    const filtered = employees;
 
     const avatarColor = name => AVATAR_COLORS[(name?.charCodeAt(0) || 0) % AVATAR_COLORS.length];
 
@@ -599,7 +617,9 @@ export default function EmployeesPage() {
                     {/* Mobile Cards */}
                     <div className="md:hidden divide-y divide-gray-100">
                         {isLoading ? (
-                            <div className="p-6 text-center text-gray-400 animate-pulse text-sm">Loading team data…</div>
+                            <div className="p-4">
+                                <CardListSkeleton count={3} />
+                            </div>
                         ) : filtered.length === 0 ? (
                             <div className="py-16 text-center text-gray-400 text-sm">No employees found.</div>
                         ) : (
@@ -679,11 +699,15 @@ export default function EmployeesPage() {
                         )}
                     </div>
 
-                    {/* Footer count */}
-                    {!isLoading && filtered.length > 0 && (
-                        <div className="px-5 py-3 border-t border-gray-100 bg-gray-50 text-xs text-blue-950 text-right">
-                            Showing {filtered.length} of {employees.length} employees
-                        </div>
+                    {/* Pagination */}
+                    {!isLoading && (
+                        <Pagination
+                            page={page}
+                            totalPages={totalPages}
+                            totalItems={totalItems}
+                            limit={limit}
+                            onPageChange={handlePageChange}
+                        />
                     )}
                 </div>
             </div>

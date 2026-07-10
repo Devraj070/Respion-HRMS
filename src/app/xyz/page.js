@@ -10,6 +10,7 @@ import {
     Calendar as CalendarIcon, Users, ArrowUpRight,
     ArrowDownLeft, ChevronRight, Download
 } from "lucide-react";
+import { CardListSkeleton } from "@/components/Skeleton";
 
 export default function HistoryPage() {
     const [history, setHistory] = useState([]);
@@ -155,9 +156,8 @@ export default function HistoryPage() {
                 {/* List Container */}
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden min-h-[300px]">
                     {loading ? (
-                        <div className="py-24 text-center">
-                            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-black mb-4"></div>
-                            <p className="font-black text-slate-400 text-[10px] uppercase tracking-[0.2em]">Processing Request</p>
+                        <div className="p-6">
+                            <CardListSkeleton count={3} />
                         </div>
                     ) : !hasSearched ? (
                         <div className="py-24 text-center flex flex-col items-center justify-center bg-slate-50/30">

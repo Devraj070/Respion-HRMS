@@ -38,6 +38,28 @@ export async function GET(req) {
             query.user = new mongoose.Types.ObjectId(userId)
         }
 
+        const page = searchParams.get("page") ? parseInt(searchParams.get("page")) : null;
+        const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")) : null;
+
+        if (page && limit) {
+            const skip = (page - 1) * limit;
+            const total = await Attendance.countDocuments(query);
+            const data = await Attendance.find(query)
+                .populate("user", "name phone designation")
+                .sort({ date: -1 })
+                .skip(skip)
+                .limit(limit);
+
+            return NextResponse.json({
+                success: true,
+                total,
+                page,
+                limit,
+                pages: Math.ceil(total / limit),
+                data
+            });
+        }
+
         const data = await Attendance.find(query)
             .populate("user", "name phone designation") // Populate user details
             .sort({ date: -1 }); // Sort by date descending

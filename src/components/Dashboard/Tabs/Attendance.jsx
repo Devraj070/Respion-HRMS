@@ -309,16 +309,29 @@
 import { useEffect, useState } from "react";
 import { RefreshCw, MapPin, CalendarDays, Clock, User, Loader2 } from "lucide-react";
 import MonthlyReportDownloader from "@/components/reuseble-components/MonthlyReportDownloader";
+import { DashboardSkeleton } from "@/components/Skeleton";
+import Pagination from "@/components/Pagination";
 
 export default function AttendancePage() {
     const [attendance, setAttendance] = useState([]);
+    const [todayAttendance, setTodayAttendance] = useState([]);
     const [date, setDate] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const fetchAttendance = async () => {
+    // Pagination states
+    const [page, setPage] = useState(1);
+    const [limit] = useState(10);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+
+    const fetchAttendance = async (currentPage = page, filterDate = date) => {
         setLoading(true);
         try {
-            const res = await fetch("/api/attendance", {
+            let url = `/api/attendance?page=${currentPage}&limit=${limit}`;
+            if (filterDate) {
+                url += `&date=${filterDate}`;
+            }
+            const res = await fetch(url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -326,7 +339,13 @@ export default function AttendancePage() {
                 },
             });
             const data = await res.json();
-            setAttendance(data.success ? data.data : []);
+            if (data.success) {
+                setAttendance(data.data);
+                setTotalPages(data.pages || 1);
+                setTotalItems(data.total || data.data.length);
+            } else {
+                setAttendance([]);
+            }
         } catch {
             setAttendance([]);
         } finally {
@@ -334,9 +353,38 @@ export default function AttendancePage() {
         }
     };
 
+    const fetchTodayAttendance = async () => {
+        try {
+            const todayStr = new Date().toISOString().split("T")[0];
+            const res = await fetch(`/api/attendance?date=${todayStr}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    'X-API-KEY': process.env.NEXT_PUBLIC_API_KEY
+                },
+            });
+            const data = await res.json();
+            if (data.success) {
+                setTodayAttendance(data.data);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     useEffect(() => {
-        fetchAttendance();
+        fetchTodayAttendance();
     }, []);
+
+    useEffect(() => {
+        setPage(1);
+        fetchAttendance(1, date);
+    }, [date]);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        fetchAttendance(newPage, date);
+    };
 
     const getGroupedData = () => {
         const groups = { Today: [], Yesterday: [], Earlier: {} };
@@ -365,15 +413,13 @@ export default function AttendancePage() {
     };
 
     const grouped = getGroupedData();
-    const todayData = attendance.filter(a => new Date(a.date).toDateString() === new Date().toDateString());
-
+    // 📊 Stats (compute from todayAttendance instead of paged attendance)
+    const todayData = todayAttendance;
     const stats = {
         totalToday: todayData.length,
         present: todayData.filter(a => a.status === "present").length,
         absent: todayData.filter(a => a.status === "absent").length,
-        avgHours: todayData.length > 0
-            ? (todayData.reduce((acc, cur) => acc + (cur.workingHours || 0), 0) / todayData.length).toFixed(1)
-            : "0.0",
+        avgHours: todayData.length ? (todayData.reduce((acc, curr) => acc + (curr.workingHours || 0), 0) / todayData.length).toFixed(1) : 0
     };
 
 
@@ -413,11 +459,7 @@ export default function AttendancePage() {
     }
 
 
-    if (loading) return (
-        <div className="flex h-screen items-center justify-center bg-white">
-            <Loader2 className="animate-spin text-indigo-600" size={32} />
-        </div>
-    );
+    if (loading) return <DashboardSkeleton />;
     return (
         <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8">
             <div className="max-w-9xl mx-auto">
@@ -475,6 +517,18 @@ export default function AttendancePage() {
                         </div>
                     )}
                 </div>
+
+                {!loading && (
+                    <div className="mt-8">
+                        <Pagination
+                            page={page}
+                            totalPages={totalPages}
+                            totalItems={totalItems}
+                            limit={limit}
+                            onPageChange={handlePageChange}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

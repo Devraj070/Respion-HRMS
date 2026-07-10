@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { DashboardSkeleton } from "@/components/Skeleton";
 
 // ─── HELPERS ────────────────────────────────────────────────────────────────
 
@@ -87,11 +88,7 @@ export default function Dashboard() {
         fetchDashboard();
     }, []);
 
-    if (loading) return (
-        <div className="flex h-screen items-center justify-center bg-white">
-            <Loader2 className="animate-spin text-indigo-600" size={32} />
-        </div>
-    );
+    if (loading) return <DashboardSkeleton />;
 
     const company = data?.company;
     const attendance = data?.attendance || data?.todayAttendance || [];

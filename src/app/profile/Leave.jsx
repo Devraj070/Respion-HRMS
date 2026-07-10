@@ -11,6 +11,7 @@ import {
     ChevronRight
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { CardListSkeleton } from "@/components/Skeleton";
 
 export default function LeavePage({ user }) {
     const [leaves, setLeaves] = useState([]);
@@ -167,7 +168,7 @@ export default function LeavePage({ user }) {
                     </div>
 
                     {loading ? (
-                        <div className="p-20 text-center animate-pulse text-gray-400 font-medium">Loading history...</div>
+                        <CardListSkeleton count={3} />
                     ) : (
                         <div className="space-y-4">
                             {leaves.length > 0 ? (

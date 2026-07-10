@@ -11,6 +11,7 @@ import {
     AlertTriangle,
     ArrowUpRight
 } from "lucide-react";
+import { TableSkeleton } from "@/components/Skeleton";
 
 export default function AttendanceUI() {
     const [data, setData] = useState([]);
@@ -44,9 +45,30 @@ export default function AttendanceUI() {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                <div className="animate-spin w-10 h-10 border-4 border-indigo-100 border-b-indigo-600 rounded-full"></div>
-                <p className="text-slate-400 text-sm font-medium">Loading records...</p>
+            <div className="max-w-6xl mx-auto space-y-8">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 className="text-2xl font-black text-slate-900 tracking-tight">Time & Attendance</h2>
+                        <p className="text-slate-500 text-sm font-medium">Review your work hours and GPS-verified logs.</p>
+                    </div>
+                </div>
+
+                {/* Key Metrics Skeleton */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="bg-white p-5 rounded-[1.5rem] border border-slate-100 shadow-sm flex items-center justify-between animate-pulse">
+                            <div className="space-y-2">
+                                <div className="h-3 bg-slate-200 rounded-full w-16"></div>
+                                <div className="h-6 bg-slate-300 rounded-md w-12"></div>
+                            </div>
+                            <div className="p-3 bg-slate-100 rounded-2xl w-10 h-10"></div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Table Skeleton */}
+                <TableSkeleton />
             </div>
         );
     }

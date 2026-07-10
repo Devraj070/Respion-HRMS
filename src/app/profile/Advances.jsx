@@ -173,6 +173,7 @@ import {
     Clock, CheckCircle2, XCircle, CreditCard,
     Calendar, AlertCircle, Banknote, Send
 } from "lucide-react";
+import { CardListSkeleton } from "@/components/Skeleton";
 
 export default function Advances({ user }) {
     const [advances, setAdvances] = useState([]);
@@ -373,10 +374,7 @@ export default function Advances({ user }) {
 
             {/* --- HISTORY --- */}
             {loading ? (
-                <div className="flex flex-col items-center justify-center min-h-[200px] space-y-4">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
-                    <p className="text-gray-400 animate-pulse">Fetching history...</p>
-                </div>
+                <CardListSkeleton count={3} />
             ) : error ? (
                 <div className="max-w-2xl mx-auto mt-10 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3 text-red-700">
                     <AlertCircle size={20} />

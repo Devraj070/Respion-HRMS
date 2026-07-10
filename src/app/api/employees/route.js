@@ -7,11 +7,55 @@ import "@/models/Department";
 import mongoose from "mongoose";
 
 // GET ALL
-export async function GET() {
+export async function GET(req) {
     try {
         await connectToDatabase();
+        
+        const { searchParams } = new URL(req.url);
+        const page = searchParams.get("page") ? parseInt(searchParams.get("page")) : null;
+        const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")) : null;
+        const search = searchParams.get("search") || "";
+        const role = searchParams.get("role") || "all";
+
+        const query = { isDeleted: { $ne: true } };
+        
+        if (role === "all") {
+            query.role = { $in: ["employee", "hr"] };
+        } else {
+            query.role = role;
+        }
+
+        if (search) {
+            query.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { email: { $regex: search, $options: "i" } },
+                { employeeId: { $regex: search, $options: "i" } }
+            ];
+        }
+
+        if (page && limit) {
+            const skip = (page - 1) * limit;
+            const total = await User.countDocuments(query);
+            const users = await User.find(query)
+                .populate("department")
+                .skip(skip)
+                .limit(limit);
+
+            return NextResponse.json(
+                { 
+                    success: true, 
+                    data: users,
+                    total,
+                    page,
+                    limit,
+                    pages: Math.ceil(total / limit)
+                },
+                { status: 200 }
+            );
+        }
+
         // role will be employee and hr
-        const users = await User.find({ role: { $in: ["employee", "hr"] }, isDeleted: { $ne: true } }).populate("department");
+        const users = await User.find(query).populate("department");
 
         return NextResponse.json(
             { success: true, data: users },

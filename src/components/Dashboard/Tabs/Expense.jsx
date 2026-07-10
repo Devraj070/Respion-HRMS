@@ -13,6 +13,8 @@ import {
     LayoutDashboard
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import { TableSkeleton } from "@/components/Skeleton";
+import Pagination from "@/components/Pagination";
 
 export default function ExpenseManagement() {
     const [expenses, setExpenses] = useState([]);
@@ -20,18 +22,35 @@ export default function ExpenseManagement() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
 
-    const fetchExpenses = async () => {
+    // Pagination states
+    const [page, setPage] = useState(1);
+    const [limit] = useState(10);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+
+    const fetchExpenses = async (currentPage = page, searchQueryVal = searchQuery, selectedDateVal = selectedDate) => {
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch("/api/expenses", {
+            let url = `/api/expenses?page=${currentPage}&limit=${limit}`;
+            if (searchQueryVal) {
+                url += `&search=${encodeURIComponent(searchQueryVal)}`;
+            }
+            if (selectedDateVal) {
+                url += `&date=${selectedDateVal}`;
+            }
+            const res = await fetch(url, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "x-api-key": process.env.NEXT_PUBLIC_API_KEY || ""
                 }
             });
             const data = await res.json();
-            if (data.success) setExpenses(data.data);
+            if (data.success) {
+                setExpenses(data.data);
+                setTotalPages(data.pages || 1);
+                setTotalItems(data.total || data.data.length);
+            }
         } catch (err) {
             toast.error("Failed to load expenses");
         } finally {
@@ -39,7 +58,18 @@ export default function ExpenseManagement() {
         }
     };
 
-    useEffect(() => { fetchExpenses(); }, []);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setPage(1);
+            fetchExpenses(1, searchQuery, selectedDate);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [searchQuery, selectedDate]);
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+        fetchExpenses(newPage, searchQuery, selectedDate);
+    };
 
     const getGroupLabel = (dateStr) => {
         const date = new Date(dateStr);
@@ -58,22 +88,14 @@ export default function ExpenseManagement() {
     };
 
     const groupedExpenses = useMemo(() => {
-        const filtered = expenses.filter(exp => {
-            const expDate = new Date(exp.createdAt).toISOString().split('T')[0];
-            const matchesDate = selectedDate ? expDate === selectedDate : true;
-            const matchesSearch = exp.user?.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                exp.category?.toLowerCase().includes(searchQuery.toLowerCase());
-            return matchesDate && matchesSearch;
-        });
-
         const groups = {};
-        filtered.forEach(exp => {
+        expenses.forEach(exp => {
             const label = getGroupLabel(exp.createdAt);
             if (!groups[label]) groups[label] = [];
             groups[label].push(exp);
         });
         return groups;
-    }, [expenses, searchQuery, selectedDate]);
+    }, [expenses]);
 
     const updateStatus = async (id, status) => {
         const loadingToast = toast.loading(`Updating...`);
@@ -98,7 +120,15 @@ export default function ExpenseManagement() {
     };
 
     if (loading && expenses.length === 0) {
-        return <div className="flex h-screen items-center justify-center bg-[#FBFBFE]"><Loader2 className="animate-spin text-indigo-500" /></div>;
+        return (
+            <div className="p-4 md:p-8 bg-[#FBFBFE] min-h-screen text-slate-600">
+                <div className="max-w-9xl mx-auto space-y-6">
+                    <div className="h-10 bg-slate-200 rounded-xl w-48 animate-pulse"></div>
+                    <div className="h-12 bg-slate-100 rounded-2xl w-full animate-pulse"></div>
+                    <TableSkeleton />
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -242,6 +272,18 @@ export default function ExpenseManagement() {
                         </div>
                     )}
                 </div>
+
+                {!loading && (
+                    <div className="mt-8">
+                        <Pagination
+                            page={page}
+                            totalPages={totalPages}
+                            totalItems={totalItems}
+                            limit={limit}
+                            onPageChange={handlePageChange}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

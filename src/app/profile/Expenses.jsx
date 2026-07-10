@@ -11,6 +11,7 @@ import {
     TrendingUp,
     Clock
 } from "lucide-react";
+import { CardListSkeleton } from "@/components/Skeleton";
 
 export default function ExpensePage({ user }) {
     const [expenses, setExpenses] = useState([]);
@@ -159,7 +160,7 @@ export default function ExpensePage({ user }) {
                     </div>
 
                     {loading ? (
-                        <div className="p-20 text-center animate-pulse text-gray-400">Loading expenses...</div>
+                        <CardListSkeleton count={3} />
                     ) : (
                         <div className="space-y-3">
                             {expenses.map((exp) => (

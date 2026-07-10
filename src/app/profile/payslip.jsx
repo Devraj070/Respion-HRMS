@@ -676,6 +676,7 @@ import {
     ShieldCheck
 } from "lucide-react";
 import jsPDF from "jspdf";
+import { CardListSkeleton } from "@/components/Skeleton";
 
 export default function Payroll({ user }) {
     const [payrolls, setPayrolls] = useState([]);
@@ -811,8 +812,29 @@ export default function Payroll({ user }) {
     };
 
     if (loading) return (
-        <div className="flex h-96 items-center justify-center">
-            <Loader2 className="animate-spin text-slate-800" size={32} />
+        <div className="max-w-6xl mx-auto p-6 lg:p-12">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+                <div>
+                    <h1 className="text-4xl font-black tracking-tight">Payroll</h1>
+                    <p className="text-slate-500 font-medium">Manage and audit your official monthly earnings.</p>
+                </div>
+            </div>
+
+            <div className="grid lg:grid-cols-12 gap-8">
+                {/* Profile Card Skeleton */}
+                <div className="lg:col-span-4 bg-slate-50 border border-slate-100 p-8 rounded-[32px] animate-pulse space-y-4">
+                    <div className="h-8 w-8 bg-slate-200 rounded-xl"></div>
+                    <div className="space-y-2">
+                        <div className="h-3 bg-slate-200 rounded-full w-20"></div>
+                        <div className="h-4 bg-slate-300 rounded-md w-32"></div>
+                    </div>
+                </div>
+
+                {/* History List Skeleton */}
+                <div className="lg:col-span-8">
+                    <CardListSkeleton count={3} />
+                </div>
+            </div>
         </div>
     );
 
