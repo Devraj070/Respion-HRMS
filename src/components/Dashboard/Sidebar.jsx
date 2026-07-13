@@ -361,7 +361,7 @@ export default function Sidebar({
 
                     {!collapsed && (
                         <p className="text-xs text-gray-400 text-center mt-3">
-                            Version 2.1.0
+                            Version 10.3.5
                         </p>
                     )}
                 </div>
