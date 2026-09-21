@@ -22,12 +22,15 @@ export async function GET(req) {
         const startDate = new Date(year, month - 1, 1);
         const endDate = new Date(year, month, 0, 23, 59, 59);
 
-        const data = await Attendance.find({
+        const rawData = await Attendance.find({
             date: {
                 $gte: startDate,
                 $lte: endDate,
             },
-        }).populate("user");
+        }).populate({ path: "user", match: { isDeleted: { $ne: true } } });
+
+        // Filter out records whose user was deleted (populate returns null on match failure)
+        const data = rawData.filter((record) => record.user !== null);
 
         return Response.json({
             success: true,
