@@ -678,7 +678,9 @@ export default function MonthlyReportDownloader() {
             if (item.user?._id) employeesMap.set(item.user._id, item.user);
         });
 
-        const employees = [...employeesMap.values()];
+        const employees = [...employeesMap.values()].sort((a, b) =>
+            (a.name || "").localeCompare(b.name || "")
+        );
 
         // PDF Styling & Generation logic remains same as your original script
         doc.setFontSize(16);
