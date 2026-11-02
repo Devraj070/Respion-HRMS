@@ -22,6 +22,8 @@ import Analytics from "@/components/Dashboard/Tabs/Analytics";
 import AdvancePage from "@/components/Dashboard/Tabs/Advances";
 import DownloadReport from "@/components/Dashboard/Tabs/DownloadReport";
 import OverdueMessage from "@/components/OverdueMessage";
+import Billing from "@/components/Dashboard/Tabs/Billing";
+import BillReminder from "@/components/BillReminder";
 
 
 export default function AdminPage() {
@@ -131,6 +133,8 @@ export default function AdminPage() {
                 return <AdvancePage />;
             case "download":
                 return <DownloadReport />;
+            case "billing":
+                return <Billing />;
 
             default:
                 return null;
@@ -171,6 +175,7 @@ export default function AdminPage() {
                     />
                     <div className="max-h-screen overflow-y-auto">{renderContent()}</div>
                 </main>
+                <BillReminder />
             </div>
         )
     );

@@ -12,12 +12,13 @@ import {
     Clock
 } from "lucide-react";
 import { CardListSkeleton } from "@/components/Skeleton";
+import { EXPENSE_CATEGORIES, getSubCategories } from "@/lib/expenseCategories";
 
 export default function ExpensePage({ user }) {
     const [expenses, setExpenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [form, setForm] = useState({ amount: "", category: "other", description: "", date: "" });
+    const [form, setForm] = useState({ amount: "", category: "other", subCategory: "", description: "", date: "" });
 
     const fetchExpenses = async () => {
         try {
@@ -51,7 +52,7 @@ export default function ExpensePage({ user }) {
             });
             if (res.ok) {
                 fetchExpenses();
-                setForm({ amount: "", category: "other", description: "", date: "" });
+                setForm({ amount: "", category: "other", subCategory: "", description: "", date: "" });
             }
         } catch (err) {
             console.error(err);
@@ -111,16 +112,31 @@ export default function ExpensePage({ user }) {
                             <label className="text-[10px] font-black text-gray-400 uppercase ml-1">Category</label>
                             <select
                                 value={form.category}
-                                onChange={(e) => setForm({ ...form, category: e.target.value })}
+                                onChange={(e) => setForm({ ...form, category: e.target.value, subCategory: "" })}
                                 className="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none appearance-none"
                             >
-                                <option value="travel">Travel</option>
-                                <option value="food">Food & Dining</option>
-                                <option value="office">Office Supplies</option>
-                                <option value="client">Client Meeting</option>
-                                <option value="other">Other</option>
+                                {Object.entries(EXPENSE_CATEGORIES).map(([key, { label }]) => (
+                                    <option key={key} value={key}>{label}</option>
+                                ))}
                             </select>
                         </div>
+
+                        {getSubCategories(form.category).length > 0 && (
+                            <div className="space-y-1">
+                                <label className="text-[10px] font-black text-gray-400 uppercase ml-1">Sub Category</label>
+                                <select
+                                    required
+                                    value={form.subCategory}
+                                    onChange={(e) => setForm({ ...form, subCategory: e.target.value })}
+                                    className="w-full bg-gray-50 border-none rounded-2xl p-4 text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none appearance-none"
+                                >
+                                    <option value="">Select sub category</option>
+                                    {getSubCategories(form.category).map((s) => (
+                                        <option key={s} value={s}>{s}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
 
                         <div className="space-y-1">
                             <label className="text-[10px] font-black text-gray-400 uppercase ml-1">Date</label>
@@ -181,7 +197,7 @@ export default function ExpensePage({ user }) {
                                     </div>
                                     <div className="flex flex-col items-end gap-2">
                                         <StatusBadge status={exp.status} />
-                                        <span className="text-[10px] font-bold text-gray-300 uppercase tracking-tighter">{exp.category}</span>
+                                        <span className="text-[10px] font-bold text-gray-300 uppercase tracking-tighter">{exp.category}{exp.subCategory ? ` · ${exp.subCategory}` : ""}</span>
                                     </div>
                                 </div>
                             ))}

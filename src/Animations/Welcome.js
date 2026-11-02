@@ -54,7 +54,7 @@ export default function LottieWelcomeAnimation() {
             `}</style>
 
             {/* Animated text */}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide text-gray-800 flex gap-2 sm:gap-3 flex-wrap justify-center px-4 text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide uppercase text-gray-800 flex gap-2 sm:gap-3 flex-wrap justify-center px-4 text-center">
                 <span className="welcome-word">Welcome</span>
                 <span className="welcome-word">To</span>
                 <span className="welcome-word respion-text">RESPION</span>

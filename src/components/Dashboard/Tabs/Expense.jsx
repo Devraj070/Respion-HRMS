@@ -209,7 +209,7 @@ export default function ExpenseManagement() {
                                                         <p className="text-sm text-slate-400 font-medium">{exp.user?.employeeId}</p>
                                                     </td>
                                                     <td className="px-6 py-5">
-                                                        <p className="text-sm text-slate-800 font-medium">{exp.category}</p>
+                                                        <p className="text-sm text-slate-800 font-medium">{exp.category}{exp.subCategory ? ` · ${exp.subCategory}` : ""}</p>
                                                         <p className="text-sm text-slate-400 ">{exp.description}</p>
                                                     </td>
                                                     <td className="px-6 py-5">
@@ -246,7 +246,7 @@ export default function ExpenseManagement() {
                                             <div className="grid grid-cols-2 gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-100">
                                                 <div>
                                                     <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">Category</label>
-                                                    <p className="text-xs font-bold text-slate-800">{exp.category}</p>
+                                                    <p className="text-xs font-bold text-slate-800">{exp.category}{exp.subCategory ? ` · ${exp.subCategory}` : ""}</p>
                                                 </div>
                                                 <div>
                                                     <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">Amount</label>

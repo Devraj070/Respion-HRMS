@@ -42,7 +42,7 @@ export async function GET(req) {
             type: "EXPENSE",
             id: e._id,
             amount: e.amount,
-            category: e.category,
+            category: e.subCategory ? `${e.category} - ${e.subCategory}` : e.category,
             description: e.description,
             status: e.status,
             user: e.user,

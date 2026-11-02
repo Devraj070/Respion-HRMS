@@ -166,7 +166,8 @@ import {
     BellIcon,
     Book,
     Coins,
-    Download
+    Download,
+    Receipt
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -234,7 +235,8 @@ export default function Sidebar({
         { key: "expense", label: "Expenses", icon: Coins },
         // { key: "notices", label: "Notices", icon: BellIcon },
         { key: "advances", label: "Advances", icon: IndianRupee },
-        { key: "download", label: "Download Report", icon: Download }
+        { key: "download", label: "Download Report", icon: Download },
+        { key: "billing", label: "Billing", icon: Receipt }
 
     ];
 
